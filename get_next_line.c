@@ -6,7 +6,7 @@
 /*   By: acoinus <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 11:57:06 by acoinus           #+#    #+#             */
-/*   Updated: 2022/07/19 14:23:06 by acoinus          ###   ########.fr       */
+/*   Updated: 2022/07/22 12:50:33 by acoinus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int	get_next_line(int fd, char **line)
 	char		buf[BUFFER_SIZE + 1];
 	char		*tmp;
 
+printf("gnl\n");
 	if (fd < 0 || BUFFER_SIZE <= 0 || !line || read(fd, buf, 0) < 0)
 		return (-1);
 	r = 1;
