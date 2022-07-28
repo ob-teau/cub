@@ -6,7 +6,7 @@
 /*   By: acoinus <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 11:57:06 by acoinus           #+#    #+#             */
-/*   Updated: 2022/07/22 12:50:33 by acoinus          ###   ########.fr       */
+/*   Updated: 2022/07/28 16:43:25 by acoinus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,35 +75,34 @@ static char	*ft_saver(char *str)
 	return (str);
 }
 
-static void	gnl_suite(char **line, int fd, char **str)
+static void	gnl_suite(char **line, int fd, char *str)
 {
-	*line = ft_strcut(str[fd]);
-	str[fd] = ft_saver(str[fd]);
+	*line = ft_strcut(str);
+	str = ft_saver(str);
 	return ;
 }
 
 int	get_next_line(int fd, char **line)
 {
-	static char	*str[1024];
+	static char	*str;
 	int			r;
 	char		buf[BUFFER_SIZE + 1];
 	char		*tmp;
 
-printf("gnl\n");
 	if (fd < 0 || BUFFER_SIZE <= 0 || !line || read(fd, buf, 0) < 0)
 		return (-1);
 	r = 1;
-	if (ft_check_n(str[fd]) == 0)
+	if (ft_check_n(str) == 0)
 		r = read(fd, buf, BUFFER_SIZE);
-	while (ft_check_n(str[fd]) == 0 && r != 0)
+	while (ft_check_n(str) == 0 && r != 0)
 	{
 		if (r == -1)
 			return (-1);
 		buf[r] = '\0';
-		tmp = str[fd];
-		str[fd] = ft_strjoin_gnl(tmp, buf);
+		tmp = str;
+		str = ft_strjoin_gnl(tmp, buf);//PROBLEM
 		free(tmp);
-		if (ft_check_n(str[fd]) == 0)
+		if (ft_check_n(str) == 0)
 			r = read(fd, buf, BUFFER_SIZE);
 	}
 	gnl_suite(line, fd, str);

@@ -6,7 +6,7 @@
 /*   By: acoinus <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 14:27:02 by acoinus           #+#    #+#             */
-/*   Updated: 2022/07/22 12:37:45 by acoinus          ###   ########.fr       */
+/*   Updated: 2022/07/28 16:04:04 by acoinus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ int		ft_error(int err, int fd)
 	else if (err == 3)
 		putstr_fd("Error\n./Error while opening the file\n", 2);
 	else if (err == 4)
-		putstr_fd("Error\n./Error with map elements part in file\n", 2);
+		putstr_fd("Error\n./Error with map elements\n", 2);
+	else if (err == 5)
+		putstr_fd("Error\n./Error in map making\n", 2);
 	if (err > 1)
 		close(fd);
 	return (1);

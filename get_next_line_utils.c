@@ -6,7 +6,7 @@
 /*   By: acoinus <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 12:02:12 by acoinus           #+#    #+#             */
-/*   Updated: 2022/07/19 14:23:39 by acoinus          ###   ########.fr       */
+/*   Updated: 2022/07/25 14:28:15 by acoinus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char    *ft_strjoin_gnl(char *s1, char *s2)
     size_t    j;
     char    *str;
 
-    str = malloc(sizeof(char) * ((ft_strlen(s1) + ft_strlen(s2)) + 1));
+    str = malloc(sizeof(char) * ((ft_strlen(s1) + ft_strlen(s2)) + 2));
     if (str == NULL)
         exit (-1);
     str[0] = '\0';

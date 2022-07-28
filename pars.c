@@ -6,7 +6,7 @@
 /*   By: acoinus <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 14:04:37 by acoinus           #+#    #+#             */
-/*   Updated: 2022/07/22 12:46:42 by acoinus          ###   ########.fr       */
+/*   Updated: 2022/07/28 16:55:56 by acoinus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,7 @@ static int	check_open(char *s_cub, t_data *data)
 		printf("OK fd = [%d]\n", fd);
 		if (elmt_checker(0, fd, line, data))
 			return (1);
-/*		if (map_checker())
-			return (1);
-*/	}
+	}
 	close(fd);
 	return (0);
 }
@@ -61,11 +59,10 @@ int	check_cub(char *s, char *cub, int cub_len)
 	return (1);
 }
 
-int pars(t_data *data, char *s_cub)
+int pars(t_data *data)
 {
-	if (check_cub(s_cub, ".cub", 4))
+	if (check_cub(data->s_cub, ".cub", 4))
 		return (ft_error(1, -1));
-	if (check_open(s_cub, data))
+	if (check_open(data->s_cub, data))
 		return (1);
 }
-
