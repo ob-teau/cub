@@ -6,7 +6,7 @@
 /*   By: acoinus <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 14:04:37 by acoinus           #+#    #+#             */
-/*   Updated: 2022/07/28 16:55:56 by acoinus          ###   ########.fr       */
+/*   Updated: 2022/08/25 13:32:39 by acoinus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,22 @@
 
 static int	check_open(char *s_cub, t_data *data)
 {
-	int	fd;
 	char *line;
 
-	fd = 0;
-	fd = open(s_cub, O_DIRECTORY);
-	if (fd > 0)
-		return (ft_error(2, fd));
-	fd = open(s_cub, O_RDONLY);
-	if (fd < 0)
-		return (ft_error(3, fd));
-	if (fd > 0)
+	data->fd = 0;
+	data->fd = open(s_cub, O_DIRECTORY);
+	if (data->fd > 0)
+		return (ft_error(2, data->fd));
+	data->fd = open(s_cub, O_RDONLY);
+	if (data->fd < 0)
+		return (ft_error(3, data->fd));
+	if (data->fd > 0)
 	{
-		printf("OK fd = [%d]\n", fd);
-		if (elmt_checker(0, fd, line, data))
+		printf("OK fd = [%d]\n", data->fd);
+		if (elmt_checker(0, line, data, 0))
 			return (1);
 	}
-	close(fd);
+	close(data->fd);
 	return (0);
 }
 

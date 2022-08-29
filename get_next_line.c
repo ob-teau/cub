@@ -6,7 +6,7 @@
 /*   By: acoinus <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 11:57:06 by acoinus           #+#    #+#             */
-/*   Updated: 2022/07/28 16:43:25 by acoinus          ###   ########.fr       */
+/*   Updated: 2022/08/22 11:44:25 by acoinus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,10 @@ static char	*ft_saver(char *str)
 	return (str);
 }
 
-static void	gnl_suite(char **line, int fd, char *str)
+static void	gnl_suite(char **line, int fd, char **str)
 {
-	*line = ft_strcut(str);
-	str = ft_saver(str);
+	*line = ft_strcut(*str);
+	*str = ft_saver(*str);
 	return ;
 }
 
@@ -105,7 +105,7 @@ int	get_next_line(int fd, char **line)
 		if (ft_check_n(str) == 0)
 			r = read(fd, buf, BUFFER_SIZE);
 	}
-	gnl_suite(line, fd, str);
+	gnl_suite(line, fd, &str);
 	if (r == 0)
 		return (0);
 	return (1);

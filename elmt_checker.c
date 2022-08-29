@@ -6,39 +6,40 @@
 /*   By: acoinus <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 12:45:22 by acoinus           #+#    #+#             */
-/*   Updated: 2022/07/28 16:56:27 by acoinus          ###   ########.fr       */
+/*   Updated: 2022/08/25 15:13:09 by acoinus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub.h"
 
-static unsigned long	fill_fc(char *s, char *dup, int i, int x)
+static int	fill_fc(char *s, char *dup, int i, int x)
 {
 	int	rgb[3];
-	int j;
-	int sz;
+	int	j;
+	int	sz;
 
 	j = -1;
 	sz = ft_strlen(s);
 	while (i + x < sz && s[i + x] && j < 3)
 	{
 		if (s[i + x] == ',')
-			continue;
+			continue ;
 		while (s[i + x] && s[i + x] != ',')
 			x++;
 		dup = ft_strdup_n(&s[i], x);
 		rgb[++j] = ft_atoi(dup);
+		if (rgb[j] < 0 || rgb[j] > 255)
+			return (0);
 		free(dup);
 		i = i + x + 1;
 		x = 0;
 	}
-	return (createRGB(rgb[0], rgb[1], rgb[2]));
+	return ((rgb[0] << 16) + (rgb[1] << 8) + rgb[2]);
 }
 
-static unsigned long	check_fc(char *s, int i)
+static int	check_fc(char *s, int i)
 {
-	int vir;
-int x = 0;
+	int	vir;
 
 	vir = 0;
 	while (s && s[++i])
@@ -51,7 +52,7 @@ int x = 0;
 
 static int	valid_path(char *s, char c, t_data *data)
 {
-	unsigned long fc;
+	int	fc;
 
 /*	if (c == 'N')
 		data->txtr[0] = mlx_xpm_file_o_image(data->mlx_ptr, s, 64, 64);
@@ -63,19 +64,25 @@ static int	valid_path(char *s, char c, t_data *data)
 		data->txtr[3] = mlx_xpm_file_o_image(data->mlx_ptr, s, 64, 64);*/
 	if (c == 'C' || c == 'F')
 	{
-//		fc = check_fc(s, -1);
-		if (!fc)
+		fc = check_fc(s, -1);
+		if (fc <= 0)
 			return (1);
 		if (c == 'C')
-			data->c = 0x99FFFF;//fc;
+		{
+			data->c = fc;
+printf(BLUE"c = [%d]"RESET"\n", data->c);
+		}
 		if (c == 'F')
-			data->f = 0xCCFFCC;//fc;
+		{
+			data->f = fc;
+printf(BLUE"f = [%d]"RESET"\n", data->f);
+		}
 	}
 /*	if ((c == 'N' && !data->txtr[0]) || (c == 'S' && !data->txtr[1])
 		|| (c == 'E' && !data->txtr[2]) || (c == 'W' && !data->txtr[3])
 		|| (c == 'F' && !data->f) || (c == 'C' && !data->c))
-		return (1);
-*/	return (0);
+		return (1);*/
+	return (0);
 }
 
 static int	elmt_checker_suite(int i, char c, char *l, t_data *data)
@@ -107,30 +114,31 @@ printf(BLUE"strdup %c = [%s]"RESET"\n", c, l);
 	return (free(s), 0);
 }
 
-int	elmt_checker(int i, int fd, char *line, t_data *data)
+int	elmt_checker(int i, char *line, t_data *data, int x)
 {
-	get_next_line(fd, &line);
-	while (line)
+printf("******elmt_checker******\n");
+	while (get_next_line(data->fd, &line) && ++x)
 	{
 		i = 0;
 		while (line[i] && line[i] == ' ')
 			i++;
-		if (line[i] == '\n' || !line[i])
+		if (line[i] == '\n' || !line[i] && !(data->f && data->c))
 		{
 			free(line);
-			get_next_line(fd, &line);
-			continue;
+			line = NULL;
+			continue ;
 		}
-		if (line[i] == '1')
-			return (map_checker(line, fd, 0, data));
+		if (data->f && data->c && line[i])/* &&data->txtr[0] && data->txtr[1] && data->txtr[2]
+			&& data->txtr[3])*/
+			return (map_checker(line, 0, data, x));
 		if (line[i] && (line[i] != 'N' && line[i] != 'S' && line[i] != 'E'
-		&& line[i] != 'W' && line[i] != 'F' && line[i] != 'C'))
-			return (free(line), ft_error(4, fd));
+			&& line[i] != 'W' && line[i] != 'F' && line[i] != 'C'))
+			return (free(line), ft_error(4, data->fd));
 		else
-			if (elmt_checker_suite(i, line[i], line, data))
-				return (free(line), ft_error(4, fd));
+			if (!(data->f && data->c) &&elmt_checker_suite(i, line[i], line, data))
+				return (free(line), ft_error(4, data->fd));
 		free(line);
-		get_next_line(fd, &line);
+		line = NULL;
 	}
-	return (0);
+	return (free(line), ft_error(5, data->fd));
 }

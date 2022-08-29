@@ -6,7 +6,7 @@
 /*   By: acoinus <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/11 11:39:06 by acoinus           #+#    #+#             */
-/*   Updated: 2022/07/28 16:55:17 by acoinus          ###   ########.fr       */
+/*   Updated: 2022/08/25 15:18:21 by acoinus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,16 @@ int	ft_free(t_data *data, int ret, int niv)
 {
 	if (data->s_cub)
 		free(data->s_cub);
-	if (niv < 1)
-	{
-		//free map
-	}
+	if (data->map.s_map)
+		free(data->map.s_map);
+	if (data->map.s_map)
 	return (ret);
 }
 
 static void	init(t_data *data, int i)
 {
 	data->fd = 0;
+	data->map.s_map = NULL;
 	while (++i < 2)
 		data->txtr[i] = NULL;
 	data->txtr[3] = '\0';
